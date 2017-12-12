@@ -3,3 +3,5 @@
 .settings
 target
 
+/.idea/
+/cuba-real.iml
