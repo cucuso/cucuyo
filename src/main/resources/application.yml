@@ -1,0 +1,12 @@
+server:
+  port: 9000
+spring:
+  data:
+    cassandra:
+      keyspace-name: cucuyo
+cassandra:
+  migration:
+    keyspace-name: cucuyo
+cucuyo:
+  setup:
+    import-enabled: true
