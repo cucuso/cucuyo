@@ -1,4 +1,4 @@
-package com.cucuyo.core;
+package com.cucuyo.core.domain;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

@@ -1,6 +1,10 @@
 package com.cucuyo.data;
 
 import com.cucuyo.Startup;
+import com.cucuyo.core.domain.Page;
+import com.cucuyo.core.domain.PageRequest;
+import lombok.val;
+import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,10 +19,24 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class SpringDataAdPropertiesRepositoryIT {
 
     @Autowired
-    private SpringDataAdPropertiesRepository repository;
+    private DataAdPropertiesRepository repository;
+
+    @After
+    public void tearDown() {
+        repository.deleteAll();
+    }
 
     @Test
-    public void findAllByTitleStartingWith() {
+    public void findAll() {
         assertThat(repository.findAll()).isNotEmpty();
+    }
+
+    @Test
+    public void findAllByFullText() {
+        val count = repository.count();
+        val pageRequest = new PageRequest(null, 1);
+        Page<AdPropertiesEntity> result = repository.findAllByFullText("casa", pageRequest);
+        result = repository.findAllByFullText("cocina", pageRequest);
+        assertThat(true).isTrue();
     }
 }

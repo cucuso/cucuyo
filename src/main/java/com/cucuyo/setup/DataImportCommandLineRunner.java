@@ -1,9 +1,8 @@
 package com.cucuyo.setup;
 
-import com.cucuyo.core.AdProperties;
+import com.cucuyo.core.domain.AdProperties;
 import com.cucuyo.data.AdPropertiesEntity;
-import com.cucuyo.data.AdPropertiesKey;
-import com.cucuyo.data.SpringDataAdPropertiesRepository;
+import com.cucuyo.data.DataAdPropertiesRepository;
 import com.fasterxml.jackson.databind.MappingIterator;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
@@ -16,6 +15,7 @@ import org.springframework.core.io.ClassPathResource;
 
 import java.io.File;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -24,7 +24,7 @@ public class DataImportCommandLineRunner implements CommandLineRunner {
 
     private static final String DEFAULT_FILE = "cassandra/import-data.csv";
 
-    private final SpringDataAdPropertiesRepository repository;
+    private final DataAdPropertiesRepository repository;
 
     @SneakyThrows
     private static <T> List<T> loadObjectList(Class<T> type, String fileName) {
@@ -49,7 +49,8 @@ public class DataImportCommandLineRunner implements CommandLineRunner {
 
     private AdPropertiesEntity asAdPropertiesEntity(AdProperties adProperties) {
         val entity = new AdPropertiesEntity();
-        entity.setId(new AdPropertiesKey(adProperties.getTitle()));
+        entity.setId(UUID.randomUUID());
+        entity.setTitle(adProperties.getTitle());
         entity.setPrice(adProperties.getPrice());
         entity.setDescription(adProperties.getDescription());
         return entity;

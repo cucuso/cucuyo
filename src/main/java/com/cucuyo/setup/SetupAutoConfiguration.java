@@ -1,7 +1,7 @@
 package com.cucuyo.setup;
 
+import com.cucuyo.data.DataAdPropertiesRepository;
 import com.cucuyo.data.DataAutoConfiguration;
-import com.cucuyo.data.SpringDataAdPropertiesRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -21,7 +21,7 @@ public class SetupAutoConfiguration {
             matchIfMissing = true,
             havingValue = "true"
     )
-    public CommandLineRunner dataImportCommandLineRunner(SpringDataAdPropertiesRepository repository) {
+    public CommandLineRunner dataImportCommandLineRunner(DataAdPropertiesRepository repository) {
         return new DataImportCommandLineRunner(repository);
     }
 }

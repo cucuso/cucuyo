@@ -6,7 +6,7 @@ spring:
       keyspace-name: cucuyo
 cassandra:
   migration:
-    keyspace-name: cucuyo
+    keyspace-name: ${spring.data.cassandra.keyspace-name}
 cucuyo:
   setup:
     import-enabled: true
