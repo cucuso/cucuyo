@@ -35,8 +35,8 @@ public class SpringDataAdPropertiesRepositoryIT {
     public void findAllByFullText() {
         val count = repository.count();
         val pageRequest = new PageRequest(null, 1);
-        Page<AdPropertiesEntity> result = repository.findAllByFullText("casa", pageRequest);
-        result = repository.findAllByFullText("cocina", pageRequest);
+        Page<AdPropertiesEntity> result = repository.findAllByFullText("*cocina*", pageRequest);
+        result = repository.findAllByFullText("cocina", new PageRequest(result.getNextPage(), 1));
         assertThat(true).isTrue();
     }
 }

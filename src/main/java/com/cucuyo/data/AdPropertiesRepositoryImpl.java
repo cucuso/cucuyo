@@ -21,4 +21,10 @@ public class AdPropertiesRepositoryImpl implements AdPropertiesRepository {
         val page = adPropertiesRepository.findAllByFullText(text, pageRequest);
         return page.map(entityMapper::asAdProperties);
     }
+
+    @Override
+    public Page<AdProperties> findAllByFullTextAndPriceBetween(String text, double from, double to, PageRequest pageRequest) {
+        val page = adPropertiesRepository.findAllByFullTextAndPriceBetween(text, from, to, pageRequest);
+        return page.map(entityMapper::asAdProperties);
+    }
 }
