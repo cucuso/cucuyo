@@ -25,31 +25,26 @@ class DataAdPropertiesRepositoryImpl implements PagingDataAdPropertiesRepository
     private static final String SEARCH_COUNT_BASE_QUERY = "SELECT COUNT(*) FROM %s.%s WHERE expr(%s, '%s');";
     private static final String SEARCH_INDEX = "ad_properties_search_index";
     private static final String SEARCH_ADV_INDEX = "ad_properties_adv_search_index";
-
-    private static final String FULLTEXT_FILTER = "{type:\"wildcard\", field:\"description\", value:\"*%s*\"}";
-    private static final String PRICE_FILTER = "{type:\"range\", field:\"price\", lower:\"%s\", upper:\"%s\"}";
-
     private final CassandraTemplate cassandraTemplate;
     private final AdPropertiesEntityMapper mapper;
-
     @Value("${spring.data.cassandra.keyspace-name}")
     private String keyspace;
 
-    private static String escapeText(String text) {
-        String regex = "([+\\-!\\(\\){}\\[\\]^\"~*?:\\\\]|[&\\|]{2})";
-        return text.replaceAll(regex, "\\\\$1").toLowerCase();
+    private static String appendWildcards(String text) {
+        return "*" + text + "*";
     }
 
     @Override
     public Page<AdPropertiesEntity> findAllByFullText(@NonNull String text, @NonNull PageRequest pageRequest) {
-        val descCondition = Builder.wildcard("description", text);
+        val descCondition = Builder.wildcard("description", appendWildcards(text));
         val filters = Builder.search().filter(descCondition).build();
         val args = new Object[]{keyspace, getTableName(), SEARCH_INDEX, filters};
         val query = String.format(SEARCH_BASE_QUERY, args);
-        return execute(query, pageRequest);
+        val totalElementsQuery = String.format(SEARCH_COUNT_BASE_QUERY, args);
+        return execute(query, totalElementsQuery, pageRequest);
     }
 
-    private Page<AdPropertiesEntity> execute(String query, PageRequest pageRequest) {
+    private Page<AdPropertiesEntity> execute(String query, String totalElementsQuery, PageRequest pageRequest) {
         val statement = new SimpleStatement(query);
         statement.setFetchSize(pageRequest.getLimit());
         pageRequest.getOffset().ifPresent(offset -> statement.setPagingState(PagingState.fromString(offset)));
@@ -57,7 +52,8 @@ class DataAdPropertiesRepositoryImpl implements PagingDataAdPropertiesRepository
         val content = fetchRows(resultSet, pageRequest.getLimit());
         val pageState = resultSet.getExecutionInfo().getPagingState();
         val pageStateString = pageState != null ? pageState.toString() : null;
-        return new Page<>(0, pageStateString, content);
+        val totalElements = cassandraTemplate.query(totalElementsQuery).one().getLong(0);
+        return new Page<>(totalElements, pageStateString, content);
     }
 
     private List<AdPropertiesEntity> fetchRows(ResultSet rows, int fetchSize) {
@@ -75,10 +71,18 @@ class DataAdPropertiesRepositoryImpl implements PagingDataAdPropertiesRepository
 
     @Override
     public Page<AdPropertiesEntity> findAllByFullTextAndPriceBetween(@NonNull String text, @NonNull double from, @NonNull double to, @NonNull PageRequest pageRequest) {
-        val fullTextFilter = String.format(FULLTEXT_FILTER, escapeText(text));
-        val priceFilter = String.format(PRICE_FILTER, from, to);
-        val args = new Object[]{keyspace, getTableName(), SEARCH_ADV_INDEX, fullTextFilter + "," + priceFilter};
+        val descCondition = Builder.wildcard("description", appendWildcards(text));
+        val priceCondition = Builder
+                .range("price")
+                .lower(from)
+                .includeLower(true)
+                .upper(to)
+                .includeUpper(true);
+        val andCondition = Builder.bool().must(descCondition, priceCondition);
+        val filters = Builder.search().filter(andCondition).build();
+        val args = new Object[]{keyspace, getTableName(), SEARCH_ADV_INDEX, filters};
         val query = String.format(SEARCH_BASE_QUERY, args);
-        return execute(query, pageRequest);
+        val totalElementsQuery = String.format(SEARCH_COUNT_BASE_QUERY, args);
+        return execute(query, totalElementsQuery, pageRequest);
     }
 }
