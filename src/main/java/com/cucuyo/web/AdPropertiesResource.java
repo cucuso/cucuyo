@@ -10,6 +10,4 @@ public class AdPropertiesResource extends ResourceSupport {
     private String title;
     private String description;
     private double price;
-
-
 }
