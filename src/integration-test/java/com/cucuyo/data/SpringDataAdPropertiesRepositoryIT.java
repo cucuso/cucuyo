@@ -27,16 +27,13 @@ public class SpringDataAdPropertiesRepositoryIT {
     }
 
     @Test
-    public void findAll() {
-        assertThat(repository.findAll()).isNotEmpty();
-    }
-
-    @Test
     public void findAllByFullText() {
         val count = repository.count();
         val pageRequest = new PageRequest(null, 1);
-        Page<AdPropertiesEntity> result = repository.findAllByFullTextAndPriceBetween("cocina", 30000, 34000, pageRequest);
-        result = repository.findAllByFullTextAndPriceBetween("cocina", 30000, 34000, new PageRequest(result.getNextPage(), 1));
+//        Page<AdPropertiesEntity> result = repository.findAllByFullTextAndPriceBetween("cocina", 30000, 34000, pageRequest);
+//        result = repository.findAllByFullTextAndPriceBetween("cocina", 30000, 34000, new PageRequest(result.getNextPage(), 1));
+        Page<AdPropertiesEntity> result = repository.findAllByFullText("cocina", pageRequest);
+        result = repository.findAllByFullText("cocina", new PageRequest(result.getNextPage(), 1));
         assertThat(true).isTrue();
     }
 }

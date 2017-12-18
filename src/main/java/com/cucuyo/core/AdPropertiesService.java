@@ -6,5 +6,5 @@ import com.cucuyo.core.domain.Page;
 
 public interface AdPropertiesService {
 
-    Page<AdProperties> search(AdPropertiesSearch searchRequest);
+    Page<AdProperties> search(AdPropertiesSearch searchParams);
 }

@@ -24,11 +24,6 @@ CREATE TABLE ad_properties (
 
 CREATE CUSTOM INDEX ad_properties_search_index ON ad_properties () USING 'com.stratio.cassandra.lucene.Index' WITH OPTIONS = {
     'refresh_seconds': '1',
-    'schema': '{ fields: { description:{ type:"string", case_sensitive: false} }}'
-};
-
-CREATE CUSTOM INDEX ad_properties_adv_search_index ON ad_properties () USING 'com.stratio.cassandra.lucene.Index' WITH OPTIONS = {
-    'refresh_seconds': '1',
     'schema': '{ fields: { description: { type:"string", case_sensitive:false}, price: { type:"double" } }}'
 };
 

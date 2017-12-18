@@ -11,7 +11,7 @@ public class AdPropertiesServiceAdapter {
 
     private final AdPropertiesService propertiesService;
 
-    public Page<AdProperties> search(AdPropertiesSearch searchRequest) {
-        return propertiesService.search(searchRequest);
+    public Page<AdProperties> search(AdPropertiesSearch searchParams) {
+        return propertiesService.search(searchParams);
     }
 }

@@ -21,10 +21,9 @@ import static com.cucuyo.data.AdPropertiesEntity.getTableName;
 @RequiredArgsConstructor
 class DataAdPropertiesRepositoryImpl implements PagingDataAdPropertiesRepository {
 
-    private static final String SEARCH_BASE_QUERY = "SELECT * FROM %s.%s WHERE expr(%s, '%s');";
-    private static final String SEARCH_COUNT_BASE_QUERY = "SELECT COUNT(*) FROM %s.%s WHERE expr(%s, '%s');";
-    private static final String SEARCH_INDEX = "ad_properties_search_index";
-    private static final String SEARCH_ADV_INDEX = "ad_properties_adv_search_index";
+    private static final String SEARCH_BASE_QUERY = "SELECT * FROM %s.%s WHERE expr(ad_properties_search_index, '%s');";
+    private static final String SEARCH_COUNT_BASE_QUERY = "SELECT COUNT(*) FROM %s.%s WHERE expr(ad_properties_search_index, '%s');";
+
     private final CassandraTemplate cassandraTemplate;
     private final AdPropertiesEntityMapper mapper;
     @Value("${spring.data.cassandra.keyspace-name}")
@@ -38,7 +37,7 @@ class DataAdPropertiesRepositoryImpl implements PagingDataAdPropertiesRepository
     public Page<AdPropertiesEntity> findAllByFullText(@NonNull String text, @NonNull PageRequest pageRequest) {
         val descCondition = Builder.wildcard("description", appendWildcards(text));
         val filters = Builder.search().filter(descCondition).build();
-        val args = new Object[]{keyspace, getTableName(), SEARCH_INDEX, filters};
+        val args = new Object[]{keyspace, getTableName(), filters};
         val query = String.format(SEARCH_BASE_QUERY, args);
         val totalElementsQuery = String.format(SEARCH_COUNT_BASE_QUERY, args);
         return execute(query, totalElementsQuery, pageRequest);
@@ -80,7 +79,7 @@ class DataAdPropertiesRepositoryImpl implements PagingDataAdPropertiesRepository
                 .includeUpper(true);
         val andCondition = Builder.bool().must(descCondition, priceCondition);
         val filters = Builder.search().filter(andCondition).build();
-        val args = new Object[]{keyspace, getTableName(), SEARCH_ADV_INDEX, filters};
+        val args = new Object[]{keyspace, getTableName(), filters};
         val query = String.format(SEARCH_BASE_QUERY, args);
         val totalElementsQuery = String.format(SEARCH_COUNT_BASE_QUERY, args);
         return execute(query, totalElementsQuery, pageRequest);

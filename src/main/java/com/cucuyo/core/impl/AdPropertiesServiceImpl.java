@@ -14,15 +14,15 @@ public class AdPropertiesServiceImpl implements AdPropertiesService {
     private final AdPropertiesRepository propertiesRepository;
 
     @Override
-    public Page<AdProperties> search(@NonNull AdPropertiesSearch searchRequest) {
+    public Page<AdProperties> search(@NonNull AdPropertiesSearch searchParams) {
 
-        if (searchRequest.isAdvanced()) {
-            return propertiesRepository.findAllByFullTextAndPriceBetween(searchRequest.getText(),
-                    searchRequest.getFromPrice(),
-                    searchRequest.getToPrice(),
-                    searchRequest.getPageRequest());
+        if (searchParams.isAdvanced()) {
+            return propertiesRepository.findAllByFullTextAndPriceBetween(searchParams.getText(),
+                    searchParams.getFromPrice(),
+                    searchParams.getToPrice(),
+                    searchParams.getPageRequest());
         }
 
-        return propertiesRepository.findAllByFullText(searchRequest.getText(), searchRequest.getPageRequest());
+        return propertiesRepository.findAllByFullText(searchParams.getText(), searchParams.getPageRequest());
     }
 }
