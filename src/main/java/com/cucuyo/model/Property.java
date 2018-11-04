@@ -1,8 +1,14 @@
 package com.cucuyo.model;
 
+import java.nio.ByteBuffer;
+
+import com.datastax.driver.mapping.annotations.Column;
 import com.datastax.driver.mapping.annotations.PartitionKey;
 import com.datastax.driver.mapping.annotations.Table;
 
+import lombok.Data;
+
+@Data()
 @Table(keyspace = "cucuyo", name = "properties")
 public class Property {
 
@@ -11,38 +17,11 @@ public class Property {
     private String title;
     private String description;
     private Double price;
-
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Double getPrice() {
-        return price;
-    }
-
-    public void setPrice(Double price) {
-        this.price = price;
-    }
+    @Column(name="image_one")
+    private ByteBuffer imageOne;
+    @Column(name="image_two")
+    private ByteBuffer imageTwo;
+    @Column(name="image_three")
+    private ByteBuffer imageThree;
 
 }
