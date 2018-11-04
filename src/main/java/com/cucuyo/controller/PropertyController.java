@@ -25,6 +25,6 @@ public class PropertyController {
 
     @PostMapping(value = "/properties")
     public Property writeProperty(@RequestBody Property property) {
-        return propertyDao.writeProperty(property);
+        return propertyDao.saveProperty(property);
     }
 }

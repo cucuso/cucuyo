@@ -68,7 +68,7 @@ public class PropertyDao {
         return new PropertiesDto(properties, pagingStateStr);
     }
 
-    public Property writeProperty(Property property) {
+    public Property saveProperty(Property property) {
         getMapper().save(property);
         return property;
     }
