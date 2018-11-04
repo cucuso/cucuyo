@@ -1,4 +1,4 @@
-package com.cuba.real.model;
+package com.cucuyo.model;
 
 import java.util.List;
 

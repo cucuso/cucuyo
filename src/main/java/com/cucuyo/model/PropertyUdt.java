@@ -1,12 +1,10 @@
-package com.cuba.real.model;
+package com.cucuyo.model;
 
-import com.datastax.driver.mapping.annotations.PartitionKey;
-import com.datastax.driver.mapping.annotations.Table;
+import com.datastax.driver.mapping.annotations.UDT;
 
-@Table(keyspace = "cucuyo", name = "properties")
-public class Property {
+@UDT(keyspace = "cucuyo", name = "property")
+public class PropertyUdt {
 
-    @PartitionKey
     private String id;
     private String title;
     private String description;

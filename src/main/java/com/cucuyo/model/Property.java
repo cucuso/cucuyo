@@ -1,22 +1,23 @@
-package com.cuba.real.model;
+package com.cucuyo.model;
 
 import com.datastax.driver.mapping.annotations.PartitionKey;
-import com.datastax.driver.mapping.annotations.UDT;
+import com.datastax.driver.mapping.annotations.Table;
 
-@UDT(keyspace = "cucuyo", name = "property")
-public class PropertyUdt {
+@Table(keyspace = "cucuyo", name = "properties")
+public class Property {
 
-    private String id;
+    @PartitionKey
+    private Long id;
     private String title;
     private String description;
     private Double price;
 
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
