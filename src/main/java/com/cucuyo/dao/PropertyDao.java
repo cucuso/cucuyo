@@ -2,6 +2,7 @@ package com.cucuyo.dao;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -69,6 +70,8 @@ public class PropertyDao {
     }
 
     public Property saveProperty(Property property) {
+        // TODO figure out how to create MLS style ID
+        property.setId(new Random().nextLong());
         getMapper().save(property);
         return property;
     }

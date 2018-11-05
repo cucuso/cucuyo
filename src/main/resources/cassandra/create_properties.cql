@@ -1,6 +1,6 @@
 CREATE TABLE cucuyo.properties (
     id bigint,
-    title text,
+    address text,
     description text,
     image_one blob,
     image_three blob,
@@ -8,7 +8,7 @@ CREATE TABLE cucuyo.properties (
     name text,
     phone text,
     price double,
-    PRIMARY KEY (id, title)
+    PRIMARY KEY (id, address)
 ) WITH CLUSTERING ORDER BY (title ASC)
     AND bloom_filter_fp_chance = 0.01
     AND caching = {'keys': 'ALL', 'rows_per_partition': 'NONE'}
