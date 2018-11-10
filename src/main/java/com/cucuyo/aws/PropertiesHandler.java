@@ -21,9 +21,7 @@ public class PropertiesHandler implements RequestHandler<Object, Object> {
   // TODO handle all operations and call controller from here based on type
   public GatewayResponse handleRequest(final Object input, Context context) {
 
-    log.error("handling lambda request for input <%s>", input);
-
-    System.out.println(context);
+    log.info("handling lambda request for input <%s>", input);
 
     Map<String, String> headers = new HashMap<>();
     headers.put("Content-Type", "application/json");
@@ -32,6 +30,7 @@ public class PropertiesHandler implements RequestHandler<Object, Object> {
     ObjectMapper mapper = new ObjectMapper();
     PropertiesDto dto = new PropertyService().getProperties(new SearchDto(), null);
     String jsonInString;
+
     try {
       jsonInString = mapper.writeValueAsString(dto);
     } catch (JsonProcessingException e) {
