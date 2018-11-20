@@ -1,36 +1,48 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: >
-    sam-app
+      cucuyo service app
 
-    Sample SAM Template for sam-app
-
-# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
     Function:
         Timeout: 20
 
+    Api:
+        Cors:
+            AllowMethods: "'DELETE,GET,HEAD,OPTIONS,PATCH,POST,PUT'"
+            AllowHeaders: "'Content-Type, Authorization, X-Amz-Date, X-Api-Key, X-Amz-Security-Token'"
+            AllowOrigin: "'*'"
+            MaxAge: "'600'"
 
 Resources:
-
     PropertiesFunction:
-        Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+        Type: AWS::Serverless::Function
         Properties:
             CodeUri: target/cucuyo-service-0.0.1-SNAPSHOT.jar
-            Handler: com.cucuyo.aws.PropertiesHandler::handleRequest
+            Handler: com.cucuyo.aws.CreatePropertiesHandler::handleRequest
             Runtime: java8
-            Environment: # More info about Env Vars: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#environment-object
-                Variables:
-                    PARAM1: VALUE
             Events:
-                Properties:
-                    Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+                PropertiesApi:
+                    Type: Api
                     Properties:
-                        Path: /
-                        Method: get
+                        Path: /properties
+                        Method: POST
+    OptionsFunction:
+        Type: AWS::Serverless::Function
+        Properties:
+            CodeUri: target/cucuyo-service-0.0.1-SNAPSHOT.jar
+            Handler: com.cucuyo.aws.OptionsHandler::handleRequest
+            Runtime: java8
+            Events:
+                PropertiesApi:
+                    Type: Api
+                    Properties:
+                        Path: /properties
+                        Method: OPTIONS
+
 
 Outputs:
 
     PropertiesApi:
-      Description: "API Gateway endpoint URL for Prod stage for properties endpoint"
-      Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/properties/"
+      Description: "API Gateway endpoint URL for  stage for properties endpoint"
+      Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod"

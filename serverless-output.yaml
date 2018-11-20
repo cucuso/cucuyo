@@ -1,0 +1,32 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'cucuyo service app
+
+  '
+Globals:
+  Api:
+    Cors:
+      AllowHeaders: '''Content-Type, Authorization, X-Amz-Date, X-Api-Key, X-Amz-Security-Token'''
+      AllowMethods: '''DELETE,GET,HEAD,OPTIONS,PATCH,POST,PUT'''
+      AllowOrigin: '''*'''
+      MaxAge: '''600'''
+  Function:
+    Timeout: 20
+Outputs:
+  PropertiesApi:
+    Description: API Gateway endpoint URL for  stage for properties endpoint
+    Value:
+      Fn::Sub: https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod
+Resources:
+  PropertiesFunction:
+    Properties:
+      CodeUri: s3://cucuyo-service/24ba2e53ac8b766ae04ec8b28398d7a6
+      Events:
+        PropertiesApi:
+          Properties:
+            Method: ANY
+            Path: /properties
+          Type: Api
+      Handler: com.cucuyo.aws.PropertiesHandler::handleRequest
+      Runtime: java8
+    Type: AWS::Serverless::Function
+Transform: AWS::Serverless-2016-10-31
