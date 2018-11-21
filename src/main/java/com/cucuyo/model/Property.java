@@ -1,8 +1,7 @@
 package com.cucuyo.model;
 
-import java.nio.ByteBuffer;
+import java.util.List;
 
-import com.datastax.driver.mapping.annotations.Column;
 import com.datastax.driver.mapping.annotations.PartitionKey;
 import com.datastax.driver.mapping.annotations.Table;
 
@@ -17,11 +16,6 @@ public class Property {
     private String address;
     private String description;
     private Double price;
-    @Column(name="image_one")
-    private ByteBuffer imageOne;
-    @Column(name="image_two")
-    private ByteBuffer imageTwo;
-    @Column(name="image_three")
-    private ByteBuffer imageThree;
+    private List<String> images;
 
 }

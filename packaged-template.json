@@ -1,0 +1,44 @@
+Uploading to 930a48cfd54c718ae3e6a8d46d94602c  262144 / 9535529.0  (2.75%)Uploading to 930a48cfd54c718ae3e6a8d46d94602c  524288 / 9535529.0  (5.50%)Uploading to 930a48cfd54c718ae3e6a8d46d94602c  786432 / 9535529.0  (8.25%)Uploading to 930a48cfd54c718ae3e6a8d46d94602c  1048576 / 9535529.0  (11.00%)Uploading to 930a48cfd54c718ae3e6a8d46d94602c  1310720 / 9535529.0  (13.75%)Uploading to 930a48cfd54c718ae3e6a8d46d94602c  1572864 / 9535529.0  (16.49%)Uploading to 930a48cfd54c718ae3e6a8d46d94602c  1835008 / 9535529.0  (19.24%)Uploading to 930a48cfd54c718ae3e6a8d46d94602c  2097152 / 9535529.0  (21.99%)Uploading to 930a48cfd54c718ae3e6a8d46d94602c  2195497 / 9535529.0  (23.02%)Uploading to 930a48cfd54c718ae3e6a8d46d94602c  2457641 / 9535529.0  (25.77%)Uploading to 930a48cfd54c718ae3e6a8d46d94602c  2719785 / 9535529.0  (28.52%)Uploading to 930a48cfd54c718ae3e6a8d46d94602c  2981929 / 9535529.0  (31.27%)Uploading to 930a48cfd54c718ae3e6a8d46d94602c  3244073 / 9535529.0  (34.02%)Uploading to 930a48cfd54c718ae3e6a8d46d94602c  3506217 / 9535529.0  (36.77%)Uploading to 930a48cfd54c718ae3e6a8d46d94602c  3768361 / 9535529.0  (39.52%)Uploading to 930a48cfd54c718ae3e6a8d46d94602c  4030505 / 9535529.0  (42.27%)Uploading to 930a48cfd54c718ae3e6a8d46d94602c  4292649 / 9535529.0  (45.02%)Uploading to 930a48cfd54c718ae3e6a8d46d94602c  4554793 / 9535529.0  (47.77%)Uploading to 930a48cfd54c718ae3e6a8d46d94602c  4816937 / 9535529.0  (50.52%)Uploading to 930a48cfd54c718ae3e6a8d46d94602c  5079081 / 9535529.0  (53.26%)Uploading to 930a48cfd54c718ae3e6a8d46d94602c  5341225 / 9535529.0  (56.01%)Uploading to 930a48cfd54c718ae3e6a8d46d94602c  5603369 / 9535529.0  (58.76%)Uploading to 930a48cfd54c718ae3e6a8d46d94602c  5865513 / 9535529.0  (61.51%)Uploading to 930a48cfd54c718ae3e6a8d46d94602c  6127657 / 9535529.0  (64.26%)Uploading to 930a48cfd54c718ae3e6a8d46d94602c  6389801 / 9535529.0  (67.01%)Uploading to 930a48cfd54c718ae3e6a8d46d94602c  6651945 / 9535529.0  (69.76%)Uploading to 930a48cfd54c718ae3e6a8d46d94602c  6914089 / 9535529.0  (72.51%)Uploading to 930a48cfd54c718ae3e6a8d46d94602c  7176233 / 9535529.0  (75.26%)Uploading to 930a48cfd54c718ae3e6a8d46d94602c  7438377 / 9535529.0  (78.01%)Uploading to 930a48cfd54c718ae3e6a8d46d94602c  7700521 / 9535529.0  (80.76%)Uploading to 930a48cfd54c718ae3e6a8d46d94602c  7962665 / 9535529.0  (83.51%)Uploading to 930a48cfd54c718ae3e6a8d46d94602c  8224809 / 9535529.0  (86.25%)Uploading to 930a48cfd54c718ae3e6a8d46d94602c  8486953 / 9535529.0  (89.00%)Uploading to 930a48cfd54c718ae3e6a8d46d94602c  8749097 / 9535529.0  (91.75%)Uploading to 930a48cfd54c718ae3e6a8d46d94602c  9011241 / 9535529.0  (94.50%)Uploading to 930a48cfd54c718ae3e6a8d46d94602c  9273385 / 9535529.0  (97.25%)Uploading to 930a48cfd54c718ae3e6a8d46d94602c  9535529 / 9535529.0  (100.00%)
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'sam-app
+
+  Sample SAM Template for sam-app
+
+  '
+Globals:
+  Function:
+    Timeout: 20
+Outputs:
+  PropertiesApi:
+    Description: API Gateway endpoint URL for Prod stage for properties endpoint
+    Value:
+      Fn::Sub: https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/properties/
+  PropertiesFunction:
+    Description: Hello World Lambda Function ARN
+    Value:
+      Fn::GetAtt:
+      - HelloWorldFunction
+      - Arn
+  PropertiesFunctionIamRole:
+    Description: Implicit IAM Role created for Hello World function
+    Value:
+      Fn::GetAtt:
+      - HelloWorldFunctionRole
+      - Arn
+Resources:
+  PropertiesFunction:
+    Properties:
+      CodeUri: s3://cucuyo-service/930a48cfd54c718ae3e6a8d46d94602c
+      Environment:
+        Variables:
+          PARAM1: VALUE
+      Events:
+        Properties:
+          Properties:
+            Method: get
+            Path: /
+          Type: Api
+      Handler: com.cucuyo.aws.PropertiesHandler::handleRequest
+      Runtime: java8
+    Type: AWS::Serverless::Function
+Transform: AWS::Serverless-2016-10-31
