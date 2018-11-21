@@ -1,6 +1,7 @@
 package com.cucuyo.aws;
 
-import java.util.HashMap;
+import static com.cucuyo.aws.HeaderConstants.BASIC_HEADERS;
+
 import java.util.Map;
 
 import com.amazonaws.services.lambda.runtime.Context;
@@ -19,20 +20,48 @@ public class GetPropertiesHandler implements RequestHandler<Map<String, Object>,
 
   public GatewayResponse handleRequest(final Map<String, Object> input, Context context) {
 
-    log.error("handling lambda request for input <%s>", input);
-    Map<String, String> headers = new HashMap<>();
-    headers.put("content-type", "application/json");
-    headers.put("X-Custom-Header", "application/json");
-    headers.put("Access-Control-Allow-Origin", "*");
+    log.info("handling lambda request for input {}", input);
+
+    Map<String, String> queryParams = (Map<String, String>) input.get("queryStringParameters");
+    SearchDto searchDto = new SearchDto();
+
+    if (queryParams != null) {
+      searchDto = buildSearchDto(queryParams);
+    }
+
+    PropertiesDto properties = getProperties(searchDto);
+
+    return new GatewayResponse(buildString(properties), BASIC_HEADERS, 200);
+  }
+
+  private PropertiesDto getProperties(SearchDto searchDto) {
+    return new PropertyService().getProperties(searchDto);
+  }
+
+  private String buildString(PropertiesDto properties) {
+
     ObjectMapper mapper = new ObjectMapper();
-   PropertiesDto dto = new PropertyService().getProperties(new SearchDto(), null);
-   String jsonInString;
-   try {
-     jsonInString = mapper.writeValueAsString(dto);
-   } catch (JsonProcessingException e) {
-     jsonInString = "unable to convert data to JSON";
-   }
-    return new GatewayResponse(jsonInString, headers, 200);
+    String jsonString;
+
+    try {
+      jsonString = mapper.writeValueAsString(properties);
+    } catch (JsonProcessingException e) {
+      jsonString = "unable to convert data to JSON";
+    }
+
+    return jsonString;
+  }
+
+  private SearchDto buildSearchDto(Map<String, String> in) {
+    SearchDto searchDto = new SearchDto();
+    searchDto.setSearch(in.get("search"));
+    if (in.get("max") != null)
+      searchDto.setMaxPrice(Integer.parseInt(in.get("max")));
+    if (in.get("minimum") != null)
+      searchDto.setMinimumPrice(Integer.parseInt(in.get("minimum")));
+    searchDto.setPage(in.get("page"));
+
+    return searchDto;
   }
 
 }

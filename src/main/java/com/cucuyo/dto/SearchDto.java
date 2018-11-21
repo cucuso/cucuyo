@@ -8,5 +8,6 @@ public class SearchDto {
     private String search;
     private int minimumPrice;
     private int maxPrice;
+    private String page;
 
 }

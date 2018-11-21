@@ -18,6 +18,7 @@ import com.datastax.driver.mapping.MappingManager;
 import com.datastax.driver.mapping.Result;
 import com.google.common.base.Strings;
 
+// TODO this class needs a lot of work
 public class PropertyDao {
 
   // TODO get from environment variable
@@ -36,20 +37,20 @@ public class PropertyDao {
 
   Session session = getCassandraSession();
 
-  public PropertiesDto getProperties(SearchDto search, String page) {
+  public PropertiesDto getProperties(SearchDto searchDto) {
 
     ResultSet results;
 
-    String query = buildQuery(search);
+    String query = buildQuery(searchDto);
 
-    if (page == null) {
+    if (searchDto.getPage() == null) {
       Statement stmt = new SimpleStatement(query);
-      stmt.setFetchSize(100);
+      stmt.setFetchSize(50);
       results = session.execute(stmt);
     } else {
-      PagingState pagingState = PagingState.fromString(page);
+      PagingState pagingState = PagingState.fromString(searchDto.getPage());
       Statement stmt = new SimpleStatement(query);
-      stmt.setFetchSize(100);
+      stmt.setFetchSize(50);
       stmt.setPagingState(pagingState);
       results = session.execute(stmt);
     }

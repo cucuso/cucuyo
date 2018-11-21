@@ -1,6 +1,7 @@
 package com.cucuyo.aws;
 
-import java.util.HashMap;
+import static com.cucuyo.aws.HeaderConstants.OPTIONS_HEADERS;
+
 import java.util.Map;
 
 import com.amazonaws.services.lambda.runtime.Context;
@@ -14,22 +15,11 @@ public class OptionsHandler implements RequestHandler<Map<String, Object>, Objec
 
   @Override
   public Object handleRequest(Map<String, Object> input, Context context) {
-    log.error("handling lambda request for input <%s>", input);
 
-    Map<String, String> optionsHeaders = new HashMap<>();
+    log.info("handling lambda request for input <%s>", input);
 
-    if (input.get("httpMethod")
-        .equals("OPTIONS")) {
-      optionsHeaders.put("Access-Control-Allow-Headers", "content-type");
-      optionsHeaders.put("Access-Control-Allow-Origin", "*");
-      optionsHeaders.put("Access-Control-Allow-Methods", "OPTIONS, GET, HEAD, POST");
+    return new GatewayResponse("", OPTIONS_HEADERS, 200);
 
-      log.info("the method is options");
-      return new GatewayResponse("", optionsHeaders, 200);
-
-    }
-
-    return new GatewayResponse("Method is not OPTIONS", optionsHeaders, 500);
   }
 
 }
