@@ -51,21 +51,4 @@ public class CreatePropertiesHandler implements RequestHandler<Map<String, Objec
     return null;
   }
 
-  private String[] extractImgArr(String arr) {
-    log.info("img array "+ arr);
-    ObjectMapper mapper = new ObjectMapper();
-    try {
-      return mapper.readValue(arr, String[].class);
-    } catch (IOException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
-    return null;
-  }
 }
-
-/*
- * 
- * body={ "address": "2345 entre 23 y 14", "description": "tremendo gao", "price": 1000, "images": [
- * 
- */

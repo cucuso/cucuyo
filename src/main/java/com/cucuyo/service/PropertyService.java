@@ -45,6 +45,7 @@ public class PropertyService {
     int i = 1;
     for (String img : images) {
 
+      // TODO IMage type is returning wrong- base 64 etc.
       String imageType = img.split(",")[0];
       String imageData = img.split(",")[1];
 
@@ -66,6 +67,14 @@ public class PropertyService {
 
   }
 
+  /*
+   * TODO NG: No content length specified for stream data. Stream contents will be buffered in
+   * memory and could result in out of memory errors. Nov 21, 2018 5:23:55 PM
+   * com.amazonaws.services.s3.AmazonS3Client putObject WARNING: No content length specified for
+   * stream data. Stream contents will be buffered in memory and could result in out of memory
+   * errors.
+   * 
+   */
   private void uploadFileToS3(String filename, String imageType, String imageData) {
 
     String bucketName = "cucuyo-images";
