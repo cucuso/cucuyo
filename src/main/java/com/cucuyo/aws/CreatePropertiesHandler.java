@@ -16,22 +16,10 @@ public class CreatePropertiesHandler implements RequestHandler<Map<String, Objec
   public GatewayResponse handleRequest(final Map<String, Object> input, Context context) {
 
     log.info("handling lambda request for input <%s>", input);
-    
-    PropertyService propertyService  = new PropertyService();
-    
+
+    PropertyService propertyService = new PropertyService();
+
     propertyService.saveProperty(null);
-
-    // GETTING DATA FROM DB
-
-    // ObjectMapper mapper = new ObjectMapper();
-    // PropertiesDto dto = new PropertyService().getProperties(new SearchDto(), null);
-    // String jsonInString;
-    //
-    // try {
-    // jsonInString = mapper.writeValueAsString(dto);
-    // } catch (JsonProcessingException e) {
-    // jsonInString = "unable to convert data to JSON";
-    // }
 
     Map<String, String> headers = new HashMap<>();
     headers.put("content-type", "application/json");
