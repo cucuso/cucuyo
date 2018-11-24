@@ -35,6 +35,45 @@ Resources:
                         Path: /properties
                         Method: POST
 
+    UsersGetInfoFunction:
+        Type: AWS::Serverless::Function
+        Properties:
+            CodeUri: target/cucuyo-service-0.0.1-SNAPSHOT.jar
+            Handler: com.cucuyo.aws.GetUserInfoHandler::handleRequest
+            Runtime: java8
+            Events:
+                PropertiesApi:
+                    Type: Api
+                    Properties:
+                        Path: /users/{email}
+                        Method: GET
+
+    UsersPostFunction:
+        Type: AWS::Serverless::Function
+        Properties:
+            CodeUri: target/cucuyo-service-0.0.1-SNAPSHOT.jar
+            Handler: com.cucuyo.aws.CreateUserHandler::handleRequest
+            Runtime: java8
+            Events:
+                PropertiesApi:
+                    Type: Api
+                    Properties:
+                        Path: /users
+                        Method: POST
+
+    LoginFunction:
+        Type: AWS::Serverless::Function
+        Properties:
+            CodeUri: target/cucuyo-service-0.0.1-SNAPSHOT.jar
+            Handler: com.cucuyo.aws.LoginHandler::handleRequest
+            Runtime: java8
+            Events:
+                PropertiesApi:
+                    Type: Api
+                    Properties:
+                        Path: /login
+                        Method: POST
+
     OptionsFunction:
         Type: AWS::Serverless::Function
         Properties:
@@ -48,6 +87,31 @@ Resources:
                         Path: /properties
                         Method: OPTIONS
 
+    OptionsCreateUserFunction:
+        Type: AWS::Serverless::Function
+        Properties:
+            CodeUri: target/cucuyo-service-0.0.1-SNAPSHOT.jar
+            Handler: com.cucuyo.aws.OptionsHandler::handleRequest
+            Runtime: java8
+            Events:
+                PropertiesApi:
+                    Type: Api
+                    Properties:
+                        Path: /users
+                        Method: OPTIONS
+
+    OptionsLoginFunction:
+        Type: AWS::Serverless::Function
+        Properties:
+            CodeUri: target/cucuyo-service-0.0.1-SNAPSHOT.jar
+            Handler: com.cucuyo.aws.OptionsHandler::handleRequest
+            Runtime: java8
+            Events:
+                PropertiesApi:
+                    Type: Api
+                    Properties:
+                        Path: /login
+                        Method: OPTIONS
 
 Outputs:
 

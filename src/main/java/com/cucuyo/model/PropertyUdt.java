@@ -1,9 +1,11 @@
 package com.cucuyo.model;
 
+import com.datastax.driver.mapping.annotations.UDT;
+
 import lombok.Data;
 
 @Data()
-//@UDT(keyspace = "cucuyo", name = "property")
+@UDT(keyspace = "cucuyo", name = "property")
 public class PropertyUdt {
 
     private String id;

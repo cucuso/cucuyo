@@ -1,59 +1,44 @@
 package com.cucuyo.dao;
 
+import com.cucuyo.dto.UserRequest;
+import com.cucuyo.model.User;
+import com.datastax.driver.core.Cluster;
+import com.datastax.driver.core.Session;
+import com.datastax.driver.mapping.Mapper;
+import com.datastax.driver.mapping.MappingManager;
+
 public class UserDao {
 
-  private static final String SELECT_ALL_QUERY = "SELECT * FROM cucuyo.props";
+  // TODO get from environment variable
+  private String cassandraContactPoint = "198.199.79.117";
 
-  private static final String SEARCH_BASE_QUERY =
-      "SELECT * FROM cucuyo.props where expr(props_index, '{filter:[ %s]}')";
+  Session session = getCassandraSession();
 
-  private static final String SELECT_SEARCH_DESCRIPTION_QUERY =
-      "{type:\"wildcard\", field:\"description\", value:\"*%s*\"}";
+  public User createUser(UserRequest userReq) {
 
-  private static final String SELECT_FROM_TO_PRICE_QUERY =
-      "{type:\"range\", field:\"price\", lower:\"%s\", upper:\"%s\"}";
+    User user = new User();
+    user.setEmail(userReq.getEmail());
+    user.setPassword(userReq.getPassword());
+    getMapper().save(user);
+    return user;
+  }
 
-//  Session session;
-//
-//  public User createUser(User user) {
-//    getMapper().save(user);
-//    return user;
-//  }
-//
-//  private String escapeQuery(String in) {
-//    String regex = "([+\\-!\\(\\){}\\[\\]^\"~*?:\\\\]|[&\\|]{2})";
-//    return in.replaceAll(regex, "\\\\$1")
-//        .toLowerCase();
-//  }
-//
-//  private String buildQuery(SearchDto searchDto) {
-//
-//    String search = "";
-//
-//    String searchQuery = searchDto.getSearch();
-//    searchQuery = (searchQuery != null) ? escapeQuery(searchQuery) : null;
-//    int from = searchDto.getMinimumPrice();
-//    int to = searchDto.getMaxPrice();
-//
-//    if (Strings.isNullOrEmpty(searchQuery) && from == 0 && to == 0) {
-//      search = SELECT_ALL_QUERY;
-//    } else if (Strings.isNullOrEmpty(searchQuery) && (from != 0 || to != 0)) {
-//      search = String.format(SEARCH_BASE_QUERY, String.format(SELECT_FROM_TO_PRICE_QUERY, from, to));
-//    } else if (!Strings.isNullOrEmpty(searchQuery) && from == 0 && to == 0) {
-//      String wildcardAndRange = String.format(SELECT_SEARCH_DESCRIPTION_QUERY, searchQuery);
-//      search = String.format(SEARCH_BASE_QUERY, wildcardAndRange);
-//    } else {
-//      String wildcardAndRange = String.format(SELECT_SEARCH_DESCRIPTION_QUERY, searchQuery) + ","
-//          + String.format(SELECT_FROM_TO_PRICE_QUERY, from, to);
-//      search = String.format(SEARCH_BASE_QUERY, wildcardAndRange);
-//    }
-//
-//    return search;
-//  }
-//
-//  private Mapper<User> getMapper() {
-//    MappingManager manager = new MappingManager(session);
-//    Mapper<User> mapper = manager.mapper(User.class);
-//    return mapper;
-//  }
+  public User getUser(String email) {
+    return getMapper().get(email);
+  }
+
+  private Mapper<User> getMapper() {
+    MappingManager manager = new MappingManager(session);
+    return manager.mapper(User.class);
+  }
+
+  private Session getCassandraSession() {
+
+    Cluster cluster = Cluster.builder()
+        .addContactPoint(cassandraContactPoint)
+        .build();
+
+    return cluster.connect();
+  }
+
 }

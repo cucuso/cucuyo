@@ -8,11 +8,11 @@ import java.util.Map;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
+import com.cucuyo.dto.CreateRequest;
 import com.cucuyo.dto.GatewayResponse;
 import com.cucuyo.service.PropertyService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j()
@@ -24,45 +24,34 @@ public class CreatePropertiesHandler implements RequestHandler<Map<String, ?>, O
 
     PropertyService propertyService = new PropertyService();
     //
-    Request body = extractBodyJson((String) input.get("body"));
+    CreateRequest body = extractBodyJson((String) input.get("body"));
 
     log.info("{}", body);
 
     String address = body.getAddress();
     String description = body.getDescription();
+    String phone = body.getPhone();
     Double price = body.getPrice();
     Float latitude = body.getLatitude();
     Float longitude = body.getLongitude();
     List<String> images = body.getImages();
 
-    propertyService.saveProperty(address, description, Double.valueOf(price), latitude, longitude, images);
+    propertyService.saveProperty(address, description, phone, Double.valueOf(price), latitude, longitude, images);
 
     return new GatewayResponse("{\"value\":\"success\"}", BASIC_HEADERS, 200);
   }
 
-  private Request extractBodyJson(String body) {
+  private CreateRequest extractBodyJson(String body) {
 
     ObjectMapper mapper = new ObjectMapper();
 
     try {
-      return mapper.readValue(body, Request.class);
+      return mapper.readValue(body, CreateRequest.class);
     } catch (IOException e) {
       // TODO Auto-generated catch block
       e.printStackTrace();
     }
     return null;
   }
-
-}
-
-
-@Data()
-class Request {
-  private String address;
-  private String description;
-  private Double price;
-  private Float longitude;
-  private Float latitude;
-  private List<String> images;
 
 }

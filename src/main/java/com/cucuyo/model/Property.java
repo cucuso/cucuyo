@@ -15,6 +15,7 @@ public class Property {
     private Long id;
     private String address;
     private String description;
+    private String phone;
     private Double price;
     private List<String> images;
     private Float latitude;

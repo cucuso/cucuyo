@@ -34,7 +34,7 @@ public class PropertyService {
     return propertyDao.getProperty(id);
   }
 
-  public void saveProperty(String address, String description, Double price, Float latitude, Float longitude,
+  public void saveProperty(String address, String description, String phone, Double price, Float latitude, Float longitude,
       List<String> images) {
 
     Property property = new Property();
@@ -48,6 +48,7 @@ public class PropertyService {
     property.setId(propertyId);
     property.setAddress(address);
     property.setDescription(description);
+    property.setPhone(phone);
     property.setPrice(price);
     property.setImages(dbImages);
     property.setLatitude(latitude);

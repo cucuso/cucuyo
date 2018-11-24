@@ -10,8 +10,6 @@ import com.cucuyo.dto.GatewayResponse;
 import com.cucuyo.dto.PropertiesDto;
 import com.cucuyo.dto.SearchDto;
 import com.cucuyo.service.PropertyService;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -31,25 +29,11 @@ public class GetPropertiesHandler implements RequestHandler<Map<String, Object>,
 
     PropertiesDto properties = getProperties(searchDto);
 
-    return new GatewayResponse(buildString(properties), BASIC_HEADERS, 200);
+    return new GatewayResponse(Util.buildString(properties), BASIC_HEADERS, 200);
   }
 
   private PropertiesDto getProperties(SearchDto searchDto) {
     return new PropertyService().getProperties(searchDto);
-  }
-
-  private String buildString(PropertiesDto properties) {
-
-    ObjectMapper mapper = new ObjectMapper();
-    String jsonString;
-
-    try {
-      jsonString = mapper.writeValueAsString(properties);
-    } catch (JsonProcessingException e) {
-      jsonString = "unable to convert data to JSON";
-    }
-
-    return jsonString;
   }
 
   private SearchDto buildSearchDto(Map<String, String> in) {
