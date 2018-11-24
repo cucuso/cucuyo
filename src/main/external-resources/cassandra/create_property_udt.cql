@@ -6,5 +6,5 @@ CREATE TYPE cucuyo.property (
     images text,
     name text,
     phone text,
-    price double,
+    price double
 );

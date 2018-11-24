@@ -17,5 +17,7 @@ public class Property {
     private String description;
     private Double price;
     private List<String> images;
+    private Float latitude;
+    private Float longitude;
 
 }

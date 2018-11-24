@@ -3,6 +3,7 @@ package com.cucuyo.service;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
@@ -33,14 +34,31 @@ public class PropertyService {
     return propertyDao.getProperty(id);
   }
 
-  public Property writeProperty(Property property) {
-    return propertyDao.saveProperty(property);
-  }
+  public void saveProperty(String address, String description, Double price, Float latitude, Float longitude,
+      List<String> images) {
 
-  public void saveProperty(String address, String description, Double price, List<String> images) {
+    Property property = new Property();
 
     Long propertyId = System.currentTimeMillis() - 1542810186703L;
+    List<String> dbImages = Collections.emptyList();
 
+    if (images != null)
+      dbImages = addImagesToS3(images, propertyId);
+
+    property.setId(propertyId);
+    property.setAddress(address);
+    property.setDescription(description);
+    property.setPrice(price);
+    property.setImages(dbImages);
+    property.setLatitude(latitude);
+    property.setLongitude(longitude);
+
+    log.info("creating new property: <{}>", property);
+    propertyDao.saveProperty(property);
+
+  }
+
+  private List<String> addImagesToS3(List<String> images, Long propertyId) {
     List<String> dbImages = new ArrayList<>();
     int i = 1;
     for (String img : images) {
@@ -55,16 +73,7 @@ public class PropertyService {
       i++;
 
     }
-
-    Property property = new Property();
-
-    property.setAddress(address);
-    property.setDescription(description);
-    property.setPrice(price);
-    property.setId(System.currentTimeMillis() - 1542810186703L);
-    property.setImages(dbImages);
-    propertyDao.saveProperty(property);
-
+    return dbImages;
   }
 
   /*
@@ -103,4 +112,5 @@ public class PropertyService {
     metadata.addUserMetadata("x-amz-meta-title", "property-image");
     return metadata;
   }
+
 }
