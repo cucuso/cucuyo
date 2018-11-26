@@ -5,6 +5,8 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
 import com.amazonaws.regions.Regions;
@@ -34,8 +36,8 @@ public class PropertyService {
     return propertyDao.getProperty(id);
   }
 
-  public void saveProperty(String address, String description, String phone, Double price, Float latitude, Float longitude,
-      List<String> images) {
+  public void saveProperty(String address, String description, String phone, Double price, Float latitude,
+      Float longitude, List<String> images) {
 
     Property property = new Property();
 
@@ -64,8 +66,7 @@ public class PropertyService {
     int i = 1;
     for (String img : images) {
 
-      // TODO IMage type is returning wrong- base 64 etc.
-      String imageType = img.split(",")[0];
+      String imageType = findImageType(img);
       String imageData = img.split(",")[1];
 
       String imgName = String.format("%s_%s.%s", propertyId, i, imageType);
@@ -75,6 +76,17 @@ public class PropertyService {
 
     }
     return dbImages;
+  }
+
+  private String findImageType(String img) {
+    Pattern p = Pattern.compile("image\\/(\\w+);");
+    Matcher m = p.matcher(img.split(",")[0]);
+
+    String imageType = "jpeg";
+
+    if (m.find())
+      imageType = m.group(1);
+    return imageType;
   }
 
   /*
