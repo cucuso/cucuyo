@@ -20,15 +20,11 @@ import com.cucuyo.dto.PropertiesDto;
 import com.cucuyo.dto.SearchDto;
 import com.cucuyo.model.Property;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j()
 public class PropertyService {
 
   PropertyDao propertyDao = new PropertyDao();
 
   public PropertiesDto getProperties(SearchDto search) {
-    log.info("Retrieving properties for searchDto {} and page {}", search);
     return propertyDao.getProperties(search);
   }
 
@@ -56,7 +52,6 @@ public class PropertyService {
     property.setLatitude(latitude);
     property.setLongitude(longitude);
 
-    log.info("creating new property: <{}>", property);
     propertyDao.saveProperty(property);
 
   }

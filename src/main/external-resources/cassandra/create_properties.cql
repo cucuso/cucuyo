@@ -11,5 +11,5 @@ CREATE TABLE cucuyo.properties (
     longitude float,
     PRIMARY KEY (id)
 );
- 
-CREATE CUSTOM INDEX properties_index ON cucuyo.properties () USING 'com.stratio.cassandra.lucene.Index' WITH OPTIONS = {'refresh_seconds': '10', 'schema': '{fields: {description:{type:"string",case_sensitive:false},price:{type:"integer"}, location: {type: "geo_point", latitude: "latitude", longitude: "longitude"}}}'};
+
+CREATE CUSTOM INDEX properties_index ON cucuyo.properties () USING 'com.stratio.cassandra.lucene.Index' WITH OPTIONS = {'refresh_seconds': '50', 'schema': '{fields: {description:{type:"string",case_sensitive:false},price:{type:"integer"}, location: {type: "geo_point", latitude: "latitude", longitude: "longitude"}}}'};

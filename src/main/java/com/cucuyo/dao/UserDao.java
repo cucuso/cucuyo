@@ -10,7 +10,7 @@ import com.datastax.driver.mapping.MappingManager;
 public class UserDao {
 
   // TODO get from environment variable
-  private String cassandraContactPoint = "198.199.79.117";
+  private String cassandraContactPoint = "68.183.136.153";
 
   Session session = getCassandraSession();
 

@@ -21,7 +21,7 @@ import com.google.common.base.Strings;
 public class PropertyDao {
 
   // TODO get from environment variable
-  private String cassandraContactPoint = "198.199.79.117";
+  private String cassandraContactPoint = "68.183.136.153";
 
   private static final String SELECT_ALL_QUERY = "SELECT * FROM cucuyo.properties";
 

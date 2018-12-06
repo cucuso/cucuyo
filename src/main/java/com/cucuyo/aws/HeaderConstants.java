@@ -8,10 +8,10 @@ public final class HeaderConstants {
 
   private HeaderConstants() {}
 
-  public static final Map<String, String> BASIC_HEADERS = ImmutableMap.of("content-type", "application/json",
+  public static final Map<String, String> BASIC = ImmutableMap.of("content-type", "application/json",
       "X-Custom-Header", "application/json", "Access-Control-Allow-Origin", "*");
   
-  public static final Map<String, String> OPTIONS_HEADERS = ImmutableMap.of("Access-Control-Allow-Headers", "content-type, Authorization",
+  public static final Map<String, String> OPTIONS = ImmutableMap.of("Access-Control-Allow-Headers", "content-type, Authorization",
       "Access-Control-Allow-Methods", "OPTIONS, GET, HEAD, POST", "Access-Control-Allow-Origin", "*");
 
 }
